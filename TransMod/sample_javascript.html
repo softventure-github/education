@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head><!-- HTMLのメタ情報を記述 -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<!-- JQuery CDN 読み込み -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- javascript 記述 (別ファイルにして読み込むのが一般的) -->
+	<script>
+	// バリデーションチェック
+	var validLengthCheck = function(){
+		if ($("input[name='length']").val().length > 5){
+			alert('入力された文字は、' + $("input[name='length']").val().length + '文字です。5文字を超えています。');
+		} else {
+			alert('正常です。');
+		} ;
+	};
+	
+	var validNumCheck = function(){
+		if (!$("input[name='num']").val().match(/^[0-9]+$/)){
+			alert('入力された文字は、半角数字ではありません。');
+		} else {
+			alert('正常です。');
+		} ;
+	};
+	
+	var validReqCheck = function(){
+		var tmpText = $("input[name='req']").val().trim();
+		if (tmpText === ''){
+			alert('必須項目です。スペースのみのも許容できません。');
+		} else {
+			alert('正常です。');
+		} ;
+	};
+	
+	// 変数定義と関数定義。
+	const text = '今日の学習は下記です。\n・バリデーションチェック\n・スタイルの動的変更(javascriptとJqueryの記述比較)\n・htmlの動的変更\n・OpenLayersによる地図表示';
+	var callAlert = function(val){
+		alert(val+'、こんにちは。' + text);
+	};
+	
+	// 関数定義はこれでもよい。
+	function addHTML(val1, val2){
+		$('.add').text(val1+val2);
+	};
+	
+	// javascript
+	function change4javasript(newColor) {
+		var elem = document.getElementById('test0');
+		elem.style.color = newColor;
+	}
+	// JQuery
+	// 辻さんが良く使う関数定義。
+	var change = {
+		css1: function() {	// id 指定
+			$('#test1').css('color', 'blue');
+		},
+		css2:  function() {	// class 指定
+			$('.test2').css('color', '#c71585'); // カラーコードを使った指定例
+		},
+	};
+	</script>
+     <!-- 地図用の処理(OpenLayers) -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>
+	<script>
+	$(function() {
+		var init_map = function() {
+			var map = new ol.Map({
+				target: 'map',
+				layers: [
+					new ol.layer.Tile({
+					source: new ol.source.OSM()
+					})
+				],
+				view: new ol.View({
+					center: ol.proj.fromLonLat([142.14, 43.65]),  //初期の中心位置 [経度, 緯度]
+					zoom: 6 //ズームレベル
+				})
+			});
+		};
+		
+		// 描画
+		init_map();
+	});
+	</script>
+	</head>
+	<body><!-- HTMLの本文を記述 -->
+		<h1>javascriptの勉強</h1>
+		<!-- alert処理 -->
+		<div style='width:100%; padding:30px, 30px;'>
+			<p>勉強内容の表示</p>
+			<button onclick="callAlert('ソフトベンチャーさん')">alert</button>
+		</div>
+		
+		<!-- 入力チェック -->
+		<div style='width:100%; padding:30px, 30px;'>
+			<p>バリデーションチェック</p>
+			<input type='text' name='length' placeholder='文字数チェック（5文字以下）'><button onclick="validLengthCheck()">alert</button>
+			<input type='text' name='num' placeholder='半角数字のチェック'><button onclick="validNumCheck()">alert</button>
+			<input type='text' name='req' placeholder='必須チェック（スペースもNG）'><button onclick="validReqCheck()">alert</button>
+		</div>
+		
+		<!-- cssの動的変更 -->
+		<div style='width:100%; padding:30px, 30px;'>
+			<p id="test0">id指定によるcss変更の検証</p>
+			<button onclick="change4javasript('red')">javascriptの検証</button>
+			<p id="test1">id指定によるcss変更の検証</p>
+			<button onclick="change.css1()">jQueryの検証1</button>
+			<p class="test2">class指定によるcss変更の検証</p>
+			<button onclick="change.css2()">jQueryの検証2</button>
+		<div style='width:100%; padding:30px, 30px;'>
+
+		<!-- html描画処理 -->
+		<div style='width:100%; padding:30px, 30px;'>
+			<p>HTML描画</p>
+			<button onclick="addHTML('犬','かわいい！')">検証3</button>
+			<span class="add">文字の置き換え</span>
+		</div>
+		
+		<div id='map' style='width:100%; height:500px; z-index:0; padding-top:30px;'></div><!-- 地図表示 -->
+	</body>
+</html>
