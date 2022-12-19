@@ -10,28 +10,33 @@
 	<script>
 	// 3文字区切りにカンマを自動挿入
 	$(document).on('keyup', '.keyupTest', function(e) {
-		var tmpVal = $(this).val();
 		
 		// Backspaceと矢印キーのイベントは除外
-		if (e.which === 8 || e.which === 39 || e.which === 37 || e.which === 38 || e.which === 40 )
+		if ($(this).val() === '')
 			return;
-			
-		if (tmpVal.length < 4)
-			return;
+
+		var tmpVal = $(this).val().replaceAll(',','');
+		var price = parseFloat(tmpVal);
 		
-		var num = tmpVal.replaceAll(',', '');
-		if ((num.length - 1) % 3 === 0) {
-			if (tmpVal.slice(-2,-1) === ',')
-				return;
-			
-			tmpVal = insertStr(tmpVal, tmpVal.length - 1, ',');
-		}
-		
+		// 3桁ずつのカンマ区切りの金額表記に変換
+		var numberWithComma = new Intl.NumberFormat();
+		var tmpVal = numberWithComma.format(price);
 		$(this).val(tmpVal);
 	});
 	
-	var insertStr = function(str, index, insert) {
-		return str.slice(0, index) + insert + str.slice(index, str.length);
+	// 合算
+	var sum = function(){
+		var tmpVal1= $("input[name='money1']").val().replaceAll(',','');
+		var tmpVal2= $("input[name='money2']").val().replaceAll(',','');
+		var money1 = parseFloat(tmpVal1);
+		var money2 = parseFloat(tmpVal2);
+		var sum = money1 + money2;
+		
+		// 3桁ずつのカンマ区切りの金額表記に変換
+		var numberWithComma = new Intl.NumberFormat();
+		var tmpVal = numberWithComma.format(sum);
+		
+		$("input[name='sum']").val(tmpVal);
 	};
 	
 	// バリデーションチェック
@@ -132,7 +137,15 @@
 		<!-- キーアップイベント時に文字列挿入 -->
 		<div style='width:100%; padding:30px, 30px;'>
 			<p>キーアップイベント時に文字列挿入</p>
-			<input type='text' class='keyupTest' name='money' placeholder='3文字目にカンマ挿入'>
+			<input type='text' class='keyupTest' name='money1' placeholder='3文字目にカンマ挿入'>
+			<input type='text' class='keyupTest' name='money2' placeholder='3文字目にカンマ挿入'>
+		</div>
+		
+		<!-- 金額計算 -->
+		<div style='width:100%; padding:30px, 30px;'>
+			<p>金額計算</p>
+			<button onclick="sum()">金額計算</button>
+			<input type='text' name='sum' placeholder='合算した値を表示'>
 		</div>
 		
 		<!-- cssの動的変更 -->
