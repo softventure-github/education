@@ -8,6 +8,32 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<!-- javascript 記述 (別ファイルにして読み込むのが一般的) -->
 	<script>
+	// 3文字区切りにカンマを自動挿入
+	$(document).on('keyup', '.keyupTest', function(e) {
+		var tmpVal = $(this).val();
+		
+		// Backspaceと矢印キーのイベントは除外
+		if (e.which === 8 || e.which === 39 || e.which === 37 || e.which === 38 || e.which === 40 )
+			return;
+			
+		if (tmpVal.length < 4)
+			return;
+		
+		var num = tmpVal.replaceAll(',', '');
+		if ((num.length - 1) % 3 === 0) {
+			if (tmpVal.slice(-2,-1) === ',')
+				return;
+			
+			tmpVal = insertStr(tmpVal, tmpVal.length - 1, ',');
+		}
+		
+		$(this).val(tmpVal);
+	});
+	
+	var insertStr = function(str, index, insert) {
+		return str.slice(0, index) + insert + str.slice(index, str.length);
+	};
+	
 	// バリデーションチェック
 	var validLengthCheck = function(){
 		if ($("input[name='length']").val().length > 5){
@@ -101,6 +127,12 @@
 			<input type='text' name='length' placeholder='文字数チェック（5文字以下）'><button onclick="validLengthCheck()">alert</button>
 			<input type='text' name='num' placeholder='半角数字のチェック'><button onclick="validNumCheck()">alert</button>
 			<input type='text' name='req' placeholder='必須チェック（スペースもNG）'><button onclick="validReqCheck()">alert</button>
+		</div>
+		
+		<!-- キーアップイベント時に文字列挿入 -->
+		<div style='width:100%; padding:30px, 30px;'>
+			<p>キーアップイベント時に文字列挿入</p>
+			<input type='text' class='keyupTest' name='money' placeholder='4文字目にカンマ挿入'>
 		</div>
 		
 		<!-- cssの動的変更 -->
