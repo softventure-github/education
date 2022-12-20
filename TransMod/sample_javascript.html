@@ -11,6 +11,10 @@
 	// 3文字区切りにカンマを自動挿入
 	$(document).on('keyup', '.keyupTest', function(e) {
 		
+		// 数字またはカンマ以外が入力されたら処理終了
+		if (!$(this).val().match(/^[0-9|,]+$/))
+			return;
+		
 		// Backspaceと矢印キーのイベントは除外
 		if ($(this).val() === '')
 			return;
@@ -22,6 +26,9 @@
 		var numberWithComma = new Intl.NumberFormat();
 		var tmpVal = numberWithComma.format(price);
 		$(this).val(tmpVal);
+		
+		// 自動合算
+		sum();
 	});
 	
 	// 合算
