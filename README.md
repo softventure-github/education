@@ -3,6 +3,7 @@
 test
 #test
 #修正
+#大野
 test1
 test2
-#oonoTest1
+#oonoTest1　解消
