@@ -6,3 +6,4 @@ test
 #大野
 test1
 test2
+#oonoTest1　解消
